@@ -117,288 +117,788 @@ button{border:none;border-radius:10px;padding:14px 18px;font-size:16px;cursor:po
 
 <script>
 
-/* ============================
-IDOL 数据
-============================ */
+
 /* ============================
 IDOL 数据 (已修复语法错误)
 ============================ */
 const IDOLS = {
-  // --- TWS ---
-  "Shinyu (TWS)": { img: "images/shinyu.jpg", traits: { zodiac: "scorpio", mbti: "INFP", blood: "O", element: "water", energy: "soft", dayMaster: "甲木" }},
-  "Dohoon (TWS)": { img: "images/dohoon.jpg", traits: { zodiac: "aquarius", mbti: "ISTP", blood: "B", element: "air", energy: "cool", dayMaster: "甲木" }},
-  "Youngjae (TWS)": { img: "images/youngjae.jpg", traits: { zodiac: "gemini", mbti: "ISFJ", blood: "AB", element: "air", energy: "calm", dayMaster: "乙木" }},
-  "Hanjin (TWS)": { img: "images/hanjin.jpg", traits: { zodiac: "capricorn", mbti: "INFJ", blood: "O", element: "earth", energy: "calm", dayMaster: "甲木" }},
+  // ─── YG Entertainment · BLACKPINK ───────────────────────
+  "Jisoo (BLACKPINK)": {
+    img: "images/jisoo.jpg",
+    traits: {
+      zodiac: "capricorn",
+      mbti: "ISTP",
+      blood: "A",
+      element: "earth",
+      energy: "cool",
+      dayMaster: "乙木"
+    }
+  },
+  "Jennie (BLACKPINK)": {
+    img: "images/jennie.jpg",
+    traits: {
+      zodiac: "capricorn",
+      mbti: "INFP",
+      blood: "B",
+      element: "earth",
+      energy: "soft",
+      dayMaster: "癸水"
+    }
+  },
+  "Rosé (BLACKPINK)": {
+    img: "images/rose.jpg",
+    traits: {
+      zodiac: "aquarius",
+      mbti: "ENFP",
+      blood: "B",
+      element: "air",
+      energy: "fun",
+      dayMaster: "乙木"
+    }
+  },
+  "Lisa (BLACKPINK)": {
+    img: "images/lisa.jpg",
+    traits: {
+      zodiac: "aries",
+      mbti: "ISFP",
+      blood: "O",
+      element: "fire",
+      energy: "soft",
+      dayMaster: "己土"
+    }
+  },
 
-  // --- RIIZE ---
-  "Shotaro (RIIZE)": { img: "images/shotaro.jpg", traits: { zodiac: "sagittarius", mbti: "ESFP", blood: "A", element: "fire", energy: "fun", dayMaster: "丁火" }},
-  "Sungchan (RIIZE)": { img: "images/sungchan.jpg", traits: { zodiac: "virgo", mbti: "ESTP", blood: "A", element: "earth", energy: "fun", dayMaster: "己土" }},
-  "Wonbin (RIIZE)": { img: "images/wonbin.jpg", traits: { zodiac: "pisces", mbti: "ISTJ", blood: "AB", element: "water", energy: "cool", dayMaster: "己土" }},
-  "Anton (RIIZE)": { img: "images/anton.jpg", traits: { zodiac: "aries", mbti: "INTP", blood: "O", element: "fire", energy: "soft", dayMaster: "己土" }},
+  // ─── SM Entertainment · aespa ────────────────────────────
+  "Karina (aespa)": {
+    img: "images/karina.jpg",
+    traits: {
+      zodiac: "aries",
+      mbti: "ENFP",
+      blood: "B",
+      element: "fire",
+      energy: "cool",
+      dayMaster: "己土"
+    }
+  },
+  "Giselle (aespa)": {
+    img: "images/giselle.jpg",
+    traits: {
+      zodiac: "scorpio",
+      mbti: "INFJ",
+      blood: "O",
+      element: "water",
+      energy: "soft",
+      dayMaster: "癸水"
+    }
+  },
+  "Winter (aespa)": {
+    img: "images/winter.jpg",
+    traits: {
+      zodiac: "capricorn",
+      mbti: "ENFJ",
+      blood: "A",
+      element: "earth",
+      energy: "cool",
+      dayMaster: "乙木"
+    }
+  },
+  "NingNing (aespa)": {
+    img: "images/ningning.jpg",
+    traits: {
+      zodiac: "libra",
+      mbti: "INFP",
+      blood: "O",
+      element: "air",
+      energy: "soft",
+      dayMaster: "乙木"
+    }
+  },
+  // ─── SM Entertainment · Hearts2Hearts ────────────────────
 
-  // --- ENHYPEN ---
-  "Jungwon (ENHYPEN)": { img: "images/jungwon.jpg", traits: { zodiac: "aquarius", mbti: "ISTJ", blood: "AB", element: "air", energy: "calm", dayMaster: "戊土" }},
-  "Heeseung (ENHYPEN)": { img: "images/heeseung.jpg", traits: { zodiac: "libra", mbti: "INTP", blood: "A", element: "air", energy: "cool", dayMaster: "辛金" }},
-  "Jay (ENHYPEN)": { img: "images/jay.jpg", traits: { zodiac: "taurus", mbti: "ENTP", blood: "B", element: "earth", energy: "cool", dayMaster: "戊土" }},
-  "Sunghoon (ENHYPEN)": { img: "images/sunghoon.jpg", traits: { zodiac: "sagittarius", mbti: "ISTJ", blood: "O", element: "fire", energy: "cool", dayMaster: "庚金" }},
-  "Sunoo (ENHYPEN)": { img: "images/sunoo.jpg", traits: { zodiac: "cancer", mbti: "ENFP", blood: "O", element: "water", energy: "soft", dayMaster: "戊土" }},
-  "Ni-ki (ENHYPEN)": { img: "images/niki.jpg", traits: { zodiac: "sagittarius", mbti: "ENFJ", blood: "B", element: "fire", energy: "cool", dayMaster: "丁火" }},
+"Jiwoo (Hearts2Hearts)": {
+  img: "images/jiwoo_h2h.jpg",
+  // 2006-09-07  处女 earth  庚
+  traits: { zodiac: "virgo", mbti: "ISTJ", blood: "A", element: "earth", energy: "calm", dayMaster: "庚金" }
+},
+"Carmen (Hearts2Hearts)": {
+  img: "images/carmen.jpg",
+  // 2006-03-28  白羊 fire   丁
+  traits: { zodiac: "aries", mbti: "ESFP", blood: "O", element: "fire", energy: "fun", dayMaster: "丁火" }
+},
+"Yuha (Hearts2Hearts)": {
+  img: "images/yuha.jpg",
+  // 2007-04-12  白羊 fire   丁
+  traits: { zodiac: "aries", mbti: "INTJ", blood: "B", element: "fire", energy: "cool", dayMaster: "丁火" }
+},
+"Stella (Hearts2Hearts)": {
+  img: "images/stella.jpg",
+  // 2007-06-18  双子 air    甲
+  traits: { zodiac: "gemini", mbti: "ENFP", blood: "O", element: "air", energy: "fun", dayMaster: "甲木" }
+},
+"Juun (Hearts2Hearts)": {
+  img: "images/juun.jpg",
+  // 2008-12-03  射手 fire   戊
+  traits: { zodiac: "sagittarius", mbti: "ISFJ", blood: "A", element: "fire", energy: "calm", dayMaster: "戊土" }
+},
+"A-na (Hearts2Hearts)": {
+  img: "images/ana.jpg",
+  // 2008-12-20  射手 fire   乙
+  traits: { zodiac: "sagittarius", mbti: "ESFP", blood: "A", element: "fire", energy: "fun", dayMaster: "乙木" }
+},
+"Ian (Hearts2Hearts)": {
+  img: "images/ian.jpg",
+  // 2009-10-09  天秤 air    戊
+  traits: { zodiac: "libra", mbti: "ENTP", blood: "B", element: "air", energy: "fun", dayMaster: "戊土" }
+},
+"Ye-on (Hearts2Hearts)": {
+  img: "images/yeon.jpg",
+  // 2010-04-19  白羊 fire   庚
+  traits: { zodiac: "aries", mbti: "INTJ", blood: "A", element: "fire", energy: "cool", dayMaster: "庚金" }
+},
+// ─────────────────────────── RED VELVET (SM Entertainment) ───────────────────────────
 
-  // --- SVT ---
-  "S.Coups (SVT)": { img: "images/scoups.jpg", traits: { zodiac: "leo", mbti: "INFP", blood: "AB", element: "fire", energy: "cool", dayMaster: "辛金" }},
-  "Jeonghan (SVT)": { img: "images/jeonghan.jpg", traits: { zodiac: "libra", mbti: "ISFJ", blood: "B", element: "air", energy: "soft", dayMaster: "戊土" }},
-  "Hoshi (SVT)": { img: "images/hoshi.jpg", traits: { zodiac: "gemini", mbti: "INTJ", blood: "B", element: "air", energy: "fun", dayMaster: "癸水" }},
-  "Wonwoo (SVT)": { img: "images/wonwoo.jpg", traits: { zodiac: "cancer", mbti: "INFJ", blood: "A", element: "water", energy: "cool", dayMaster: "乙木" }},
-  "Mingyu (SVT)": { img: "images/mingyu.jpg", traits: { zodiac: "aries", mbti: "ENFJ", blood: "B", element: "fire", energy: "fun", dayMaster: "戊土" }},
-  "DK (SVT)": { img: "images/dk.jpg", traits: { zodiac: "aquarius", mbti: "INFP", blood: "O", element: "air", energy: "fun", dayMaster: "辛金" }},
-  "Vernon (SVT)": { img: "images/vernon.jpg", traits: { zodiac: "aquarius", mbti: "ENTP", blood: "A", element: "air", energy: "cool", dayMaster: "丙火" }},
+  "Irene (Red Velvet)": {
+    img: "images/redvelvet/irene.jpg",
+    traits: {
+      birthday:  "1991-03-29",
+      zodiac:    "aries",
+      mbti:      "ISFJ",
+      blood:     "A",
+      element:   "fire",
+      energy:    "cool",
+      dayMaster: "庚金",
+    }
+  },
 
-  // --- SKZ ---
-  "Bang Chan (SKZ)": { img: "images/bangchan.jpg", traits: { zodiac: "libra", mbti: "ENFJ", blood: "O", element: "air", energy: "cool", dayMaster: "戊土" }},
-  "Hyunjin (SKZ)": { img: "images/hyunjin.jpg", traits: { zodiac: "pisces", mbti: "INFP", blood: "B", element: "water", energy: "soft", dayMaster: "丁火" }},
-  "Felix (SKZ)": { img: "images/felix.jpg", traits: { zodiac: "virgo", mbti: "ESFJ", blood: "AB", element: "earth", energy: "soft", dayMaster: "丙火" }},
-//tearuse
-  "Hyunsuk (TREASURE)": {
-  img: "images/hyunsuk.jpg",
-  traits: {
-    zodiac: "taurus",
-    mbti: "ENFP",
-    blood: "A",
-    element: "earth",
-    energy: "fun",
-    dayMaster: "癸水"
-  }
+  "Seulgi (Red Velvet)": {
+    img: "images/redvelvet/seulgi.jpg",
+    traits: {
+      birthday:  "1994-02-10",
+      zodiac:    "aquarius",
+      mbti:      "ISTP",
+      blood:     "B",
+      element:   "air",
+      energy:    "cool",
+      dayMaster: "己土",
+    }
+  },
+
+  "Wendy (Red Velvet)": {
+    img: "images/redvelvet/wendy.jpg",
+    traits: {
+      birthday:  "1994-02-21",
+      zodiac:    "pisces",
+      mbti:      "ENFJ",
+      blood:     "O",
+      element:   "water",
+      energy:    "soft",
+      dayMaster: "庚金",
+    }
+  },
+
+  "Joy (Red Velvet)": {
+    img: "images/redvelvet/joy.jpg",
+    traits: {
+      birthday:  "1996-09-03",
+      zodiac:    "virgo",
+      mbti:      "ENFJ",
+      blood:     "A",
+      element:   "earth",
+      energy:    "fun",
+      dayMaster: "乙木",
+    }
+  },
+
+  "Yeri (Red Velvet)": {
+    img: "images/redvelvet/yeri.jpg",
+    traits: {
+      birthday:  "1999-03-05",
+      zodiac:    "pisces",
+      mbti:      "ENFP",
+      blood:     "B",
+      element:   "water",
+      energy:    "fun",
+      dayMaster: "戊土",
+    }
+  },
+
+  // ─────────────────────────── TWICE (JYP Entertainment) ───────────────────────────
+
+  "Nayeon (TWICE)": {
+    img: "images/twice/nayeon.jpg",
+    traits: {
+      birthday:  "1995-09-22",
+      zodiac:    "virgo",
+      mbti:      "ENFJ",
+      blood:     "A",
+      element:   "earth",
+      energy:    "fun",
+      dayMaster: "戊土",
+    }
+  },
+
+  "Jeongyeon (TWICE)": {
+    img: "images/twice/jeongyeon.jpg",
+    traits: {
+      birthday:  "1996-09-01",
+      zodiac:    "virgo",
+      mbti:      "ISTP",
+      blood:     "O",
+      element:   "earth",
+      energy:    "cool",
+      dayMaster: "癸水",
+    }
+  },
+
+  "Momo (TWICE)": {
+    img: "images/twice/momo.jpg",
+    traits: {
+      birthday:  "1996-11-09",
+      zodiac:    "scorpio",
+      mbti:      "ESFP",
+      blood:     "A",
+      element:   "water",
+      energy:    "fun",
+      dayMaster: "壬水",
+    }
+  },
+
+  "Sana (TWICE)": {
+    img: "images/twice/sana.jpg",
+    traits: {
+      birthday:  "1996-12-29",
+      zodiac:    "capricorn",
+      mbti:      "ENFP",
+      blood:     "B",
+      element:   "earth",
+      energy:    "soft",
+      dayMaster: "壬水",
+    }
+  },
+
+  "Jihyo (TWICE)": {
+    img: "images/twice/jihyo.jpg",
+    traits: {
+      birthday:  "1997-02-01",
+      zodiac:    "aquarius",
+      mbti:      "ESFJ",
+      blood:     "AB",
+      element:   "air",
+      energy:    "soft",
+      dayMaster: "丙火",
+    }
+  },
+
+  "Mina (TWICE)": {
+    img: "images/twice/mina.jpg",
+    traits: {
+      birthday:  "1997-03-24",
+      zodiac:    "aries",
+      mbti:      "INFP",
+      blood:     "A",
+      element:   "fire",
+      energy:    "calm",
+      dayMaster: "丁火",
+    }
+  },
+
+  "Dahyun (TWICE)": {
+    img: "images/twice/dahyun.jpg",
+    traits: {
+      birthday:  "1998-05-28",
+      zodiac:    "gemini",
+      mbti:      "ENTP",
+      blood:     "A",
+      element:   "air",
+      energy:    "fun",
+      dayMaster: "丁火",
+    }
+  },
+
+  "Chaeyoung (TWICE)": {
+    img: "images/twice/chaeyoung.jpg",
+    traits: {
+      birthday:  "1999-04-23",
+      zodiac:    "taurus",
+      mbti:      "ISFP",
+      blood:     "B",
+      element:   "earth",
+      energy:    "cool",
+      dayMaster: "丁火",
+    }
+  },
+
+  "Tzuyu (TWICE)": {
+    img: "images/twice/tzuyu.jpg",
+    traits: {
+      birthday:  "1999-06-14",
+      zodiac:    "gemini",
+      mbti:      "ISFP",
+      blood:     "A",
+      element:   "air",
+      energy:    "calm",
+      dayMaster: "己土",
+    }
+  },
+
+  // ─────────────────────────── (G)I-DLE (Cube Entertainment) ───────────────────────────
+
+  "Miyeon (G)I-DLE)": {
+    img: "images/gidle/miyeon.jpg",
+    traits: {
+      birthday:  "1997-01-31",
+      zodiac:    "aquarius",
+      mbti:      "ENFJ",
+      blood:     "A",
+      element:   "air",
+      energy:    "soft",
+      dayMaster: "乙木",
+    }
+  },
+
+  "Minnie ((G)I-DLE)": {
+    img: "images/gidle/minnie.jpg",
+    traits: {
+      birthday:  "1997-10-23",
+      zodiac:    "scorpio",
+      mbti:      "INFP",
+      blood:     "O",
+      element:   "water",
+      energy:    "soft",
+      dayMaster: "庚金",
+    }
+  },
+
+  "Soyeon ((G)I-DLE)": {
+    img: "images/gidle/soyeon.jpg",
+    traits: {
+      birthday:  "1998-08-26",
+      zodiac:    "virgo",
+      mbti:      "ENTJ",
+      blood:     "AB",
+      element:   "earth",
+      energy:    "cool",
+      dayMaster: "丁火",
+    }
+  },
+
+  "Yuqi ((G)I-DLE)": {
+    img: "images/gidle/yuqi.jpg",
+    traits: {
+      birthday:  "1999-09-23",
+      zodiac:    "libra",
+      mbti:      "ENFP",
+      blood:     "O",
+      element:   "air",
+      energy:    "fun",
+      dayMaster: "庚金",
+    }
+  },
+
+  "Shuhua ((G)I-DLE)": {
+    img: "images/gidle/shuhua.jpg",
+    traits: {
+      birthday:  "2000-01-06",
+      zodiac:    "capricorn",
+      mbti:      "ISFP",
+      blood:     "A",
+      element:   "earth",
+      energy:    "soft",
+      dayMaster: "乙木",
+    }
+  },
+
+  // ─────────────────────────── BABYMONSTER (YG Entertainment) ───────────────────────────
+
+  "Ruka (BABYMONSTER)": {
+    img: "images/babymonster/ruka.jpg",
+    traits: {
+      birthday:  "2002-03-20",
+      zodiac:    "pisces",
+      mbti:      "ISTJ",
+      blood:     "O",
+      element:   "water",
+      energy:    "cool",
+      dayMaster: "己土",
+    }
+  },
+
+  "Pharita (BABYMONSTER)": {
+    img: "images/babymonster/pharita.jpg",
+    traits: {
+      birthday:  "2005-08-26",
+      zodiac:    "virgo",
+      mbti:      "INTP",
+      blood:     "A",
+      element:   "earth",
+      energy:    "calm",
+      dayMaster: "甲木",
+    }
+  },
+
+  "Asa (BABYMONSTER)": {
+    img: "images/babymonster/asa.jpg",
+    traits: {
+      birthday:  "2006-04-17",
+      zodiac:    "aries",
+      mbti:      "ENFP",
+      blood:     "O",
+      element:   "fire",
+      energy:    "fun",
+      dayMaster: "戊土",
+    }
+  },
+
+  "Ahyeon (BABYMONSTER)": {
+    img: "images/babymonster/ahyeon.jpg",
+    traits: {
+      birthday:  "2007-04-11",
+      zodiac:    "aries",
+      mbti:      "ISTJ",
+      blood:     "A",
+      element:   "fire",
+      energy:    "soft",
+      dayMaster: "丁火",
+    }
+  },
+
+  "Rami (BABYMONSTER)": {
+    img: "images/babymonster/rami.jpg",
+    traits: {
+      birthday:  "2007-10-17",
+      zodiac:    "libra",
+      mbti:      "INFJ",
+      blood:     "O",
+      element:   "air",
+      energy:    "calm",
+      dayMaster: "丙火",
+    }
+  },
+
+  "Rora (BABYMONSTER)": {
+    img: "images/babymonster/rora.jpg",
+    traits: {
+      birthday:  "2008-08-14",
+      zodiac:    "leo",
+      mbti:      "INTP",
+      blood:     "A",
+      element:   "fire",
+      energy:    "soft",
+      dayMaster: "戊土",
+    }
+  },
+
+  "Chiquita (BABYMONSTER)": {
+    img: "images/babymonster/chiquita.jpg",
+    traits: {
+      birthday:  "2009-02-17",
+      zodiac:    "aquarius",
+      mbti:      "ISTP",
+      blood:     "O",
+      element:   "air",
+      energy:    "cool",
+      dayMaster: "乙木",
+    }
+  },
+
+  // ─────────────────────────── MAMAMOO (RBW Entertainment) ───────────────────────────
+
+  "Solar (MAMAMOO)": {
+    img: "images/mamamoo/solar.jpg",
+    traits: {
+      birthday:  "1991-02-21",
+      zodiac:    "pisces",
+      mbti:      "ENFJ",
+      blood:     "AB",
+      element:   "water",
+      energy:    "fun",
+      dayMaster: "甲木",
+    }
+  },
+
+  "Moonbyul (MAMAMOO)": {
+    img: "images/mamamoo/moonbyul.jpg",
+    traits: {
+      birthday:  "1992-12-22",
+      zodiac:    "capricorn",
+      mbti:      "ISTP",
+      blood:     "O",
+      element:   "earth",
+      energy:    "cool",
+      dayMaster: "甲木",
+    }
+  },
+
+  "Wheein (MAMAMOO)": {
+    img: "images/mamamoo/wheein.jpg",
+    traits: {
+      birthday:  "1995-04-17",
+      zodiac:    "aries",
+      mbti:      "ENFP",
+      blood:     "A",
+      element:   "fire",
+      energy:    "soft",
+      dayMaster: "庚金",
+    }
+  },
+
+  "Hwasa (MAMAMOO)": {
+    img: "images/mamamoo/hwasa.jpg",
+    traits: {
+      birthday:  "1995-07-23",
+      zodiac:    "leo",
+      mbti:      "ISFP",
+      blood:     "O",
+      element:   "fire",
+      energy:    "cool",
+      dayMaster: "丁火",
+    }
+  },
+
+  // ─────────────────────────── KISS OF LIFE (S2 Entertainment) ───────────────────────────
+
+  "Julie (KISS OF LIFE)": {
+    img: "images/kissoflife/julie.jpg",
+    traits: {
+      birthday:  "2000-03-29",
+      zodiac:    "aries",
+      mbti:      "ENFP",
+      blood:     "O",
+      element:   "fire",
+      energy:    "fun",
+      dayMaster: "戊土",
+    }
+  },
+
+  "Natty (KISS OF LIFE)": {
+    img: "images/kissoflife/natty.jpg",
+    traits: {
+      birthday:  "2002-05-30",
+      zodiac:    "gemini",
+      mbti:      "INFP",
+      blood:     "O",
+      element:   "air",
+      energy:    "cool",
+      dayMaster: "庚金",
+    }
+  },
+
+  "Belle (KISS OF LIFE)": {
+    img: "images/kissoflife/belle.jpg",
+    traits: {
+      birthday:  "2004-03-19",
+      zodiac:    "pisces",
+      mbti:      "ENFP",
+      blood:     "AB",
+      element:   "water",
+      energy:    "soft",
+      dayMaster: "丁火",
+    }
+  },
+
+  "Haneul (KISS OF LIFE)": {
+    img: "images/kissoflife/haneul.jpg",
+    traits: {
+      birthday:  "2005-05-25",
+      zodiac:    "gemini",
+      mbti:      "ESTJ",
+      blood:     "B",
+      element:   "air",
+      energy:    "calm",
+      dayMaster: "辛金",
+    }
+  },
+  // ─── JYP Entertainment · ITZY ────────────────────────────
+  "Yeji (ITZY)": {
+    img: "images/yeji.jpg",
+    traits: {
+      zodiac: "gemini",
+      mbti: "ESFJ",
+      blood: "A",
+      element: "air",
+      energy: "soft",
+      dayMaster: "乙木"
+    }
+  },
+  "Ryujin (ITZY)": {
+    img: "images/ryujin.jpg",
+    traits: {
+      zodiac: "aries",
+      mbti: "INTJ",
+      blood: "B",
+      element: "fire",
+      energy: "cool",
+      dayMaster: "辛金"
+    }
+  },
+  "Chaeryeong (ITZY)": {
+    img: "images/chaeryeong.jpg",
+    traits: {
+      zodiac: "gemini",
+      mbti: "ISFJ",
+      blood: "B",
+      element: "air",
+      energy: "calm",
+      dayMaster: "庚金"
+    }
+  },
+  "Yuna (ITZY)": {
+    img: "images/yuna.jpg",
+    traits: {
+      zodiac: "sagittarius",
+      mbti: "ENFP",
+      blood: "A",
+      element: "fire",
+      energy: "fun",
+      dayMaster: "丁火"
+    }
+  },
+  // ─── JYP Entertainment · NMIXX ───────────────────────────
+"Lily (NMIXX)": {
+  img: "images/lily.jpg",
+  // 2002-10-17  天秤 air    己
+  traits: { zodiac: "libra", mbti: "ENFP", blood: "O", element: "air", energy: "fun", dayMaster: "己土" }
 },
-"Jihoon (TREASURE)": {
-  img: "images/jihoon.jpg",
-  traits: {
-    zodiac: "pisces",
-    mbti: "ENTJ",
-    blood: "B",
-    element: "water",
-    energy: "cool",
-    dayMaster: "辛金"
-  }
+"Haewon (NMIXX)": {
+  img: "images/haewon.jpg",
+  // 2003-02-25  双鱼 water  庚
+  traits: { zodiac: "pisces", mbti: "ISTP", blood: "O", element: "water", energy: "cool", dayMaster: "庚金" }
 },
-"Yoshi (TREASURE)": {
-  img: "images/yoshi.jpg",
-  traits: {
-    zodiac: "taurus",
-    mbti: "INFP",
-    blood: "A",
-    element: "earth",
-    energy: "soft",
-    dayMaster: "癸水"
-  }
+"Sullyoon (NMIXX)": {
+  img: "images/sullyoon.jpg",
+  // 2004-01-26  水瓶 air    乙
+  traits: { zodiac: "aquarius", mbti: "ISFP", blood: "A", element: "air", energy: "soft", dayMaster: "乙木" }
+},
+"Bae (NMIXX)": {
+  img: "images/bae.jpg",
+  // 2004-12-28  摩羯 earth  壬
+  traits: { zodiac: "capricorn", mbti: "ENFP", blood: "B", element: "earth", energy: "fun", dayMaster: "壬水" }
+},
+"Jiwoo (NMIXX)": {
+  img: "images/jiwoo_nmixx.jpg",
+  // 2005-04-13  白羊 fire   戊
+  traits: { zodiac: "aries", mbti: "ISTP", blood: "AB", element: "fire", energy: "cool", dayMaster: "戊土" }
+},
+"Kyujin (NMIXX)": {
+  img: "images/kyujin.jpg",
+  // 2006-05-26  双子 air    丙
+  traits: { zodiac: "gemini", mbti: "ESFJ", blood: "A", element: "air", energy: "fun", dayMaster: "丙火" }
+},
+// ─── HYBE · BE:LIFT Lab · ILLIT ──────────────────────────
+"Yunah (ILLIT)": {
+  img: "images/yunah.jpg",
+  // 2004-01-15  摩羯 earth  甲
+  traits: { zodiac: "capricorn", mbti: "ENTP", blood: "A", element: "earth", energy: "fun", dayMaster: "甲木" }
+},
+"Minju (ILLIT)": {
+  img: "images/minju.jpg",
+  // 2004-05-11  金牛 earth  辛
+  traits: { zodiac: "taurus", mbti: "ISTP", blood: "O", element: "earth", energy: "cool", dayMaster: "辛金" }
+},
+"Moka (ILLIT)": {
+  img: "images/moka.jpg",
+  // 2004-10-08  天秤 air    辛
+  traits: { zodiac: "libra", mbti: "ISFP", blood: "B", element: "air", energy: "soft", dayMaster: "辛金" }
+},
+"Wonhee (ILLIT)": {
+  img: "images/wonhee.jpg",
+  // 2007-06-26  巨蟹 water  壬
+  traits: { zodiac: "cancer", mbti: "ISFP", blood: "A", element: "water", energy: "soft", dayMaster: "壬水" }
+},
+"Iroha (ILLIT)": {
+  img: "images/iroha.jpg",
+  // 2008-02-04  水瓶 air    乙
+  traits: { zodiac: "aquarius", mbti: "INFJ", blood: "A", element: "air", energy: "soft", dayMaster: "乙木" }
 },
 
-"Asahi(TREASURE)": {
-  img: "images/asahi.jpg",
-  traits: {
-    zodiac: "leo",
-    mbti: "INFP",
-    blood: "AB",
-    element: "fire",
-    energy: "soft",
-    dayMaster: "乙木"
-  }
+// ─── Starship Entertainment · IVE ────────────────────────
+"Gaeul (IVE)": {
+  img: "images/gaeul.jpg",
+  // 2002-09-24  天秤 air    丙
+  traits: { zodiac: "libra", mbti: "ISTJ", blood: "B", element: "air", energy: "calm", dayMaster: "丙火" }
 },
-"Haruto (TREASURE)": {
-  img: "images/haruto.jpg",
-  traits: {
-    zodiac: "aries",
-    mbti: "ISFP",
-    blood: "B",
-    element: "fire",
-    energy: "calm",
-    dayMaster: "甲木"
-  }
+"Yujin (IVE)": {
+  img: "images/yujin.jpg",
+  // 2003-09-01  处女 earth  戊
+  traits: { zodiac: "virgo", mbti: "ISTP", blood: "A", element: "earth", energy: "cool", dayMaster: "戊土" }
 },
-"Junkyu(TREASURE)": {
-  img: "images/junkyu.jpg",
-  traits: {
-    zodiac: "virgo",
-    mbti: "INFP",
-    blood: "O",
-    element: "earth",
-    energy: "soft",
-    dayMaster: "庚金"
-  }
+"Rei (IVE)": {
+  img: "images/rei.jpg",
+  // 2004-02-03  水瓶 air    癸
+  traits: { zodiac: "aquarius", mbti: "INFJ", blood: "A", element: "air", energy: "soft", dayMaster: "癸水" }
 },
-  "Yeonjun (TXT)": {
-  img: "images/yeonjun.jpg",
-  traits: {
-    zodiac: "virgo", 
-    mbti: "ENFP",  
-    blood: "A",     
-    element: "earth",
-    energy: "cool",
-    dayMaster: "戊土"
-  }
+"Wonyoung (IVE)": {
+  img: "images/wonyoung.jpg",
+  // 2004-08-31  处女 earth  癸
+  traits: { zodiac: "virgo", mbti: "ENTJ", blood: "O", element: "earth", energy: "fun", dayMaster: "癸水" }
 },
-"Soobin (TXT)": {
-  img: "images/soobin.jpg",
-  traits: {
-    zodiac: "sagittarius", 
-    mbti: "ISFP",          
-    blood: "A",            
-    element: "fire",       
-    energy: "soft",
-    dayMaster: "丁火"     
-  }
+"Liz (IVE)": {
+  img: "images/liz.jpg",
+  // 2004-11-21  天蝎 water  乙
+  traits: { zodiac: "scorpio", mbti: "INTP", blood: "AB", element: "water", energy: "cool", dayMaster: "乙木" }
 },
-"Beomgyu (TXT)": {
-  img: "images/beomgyu.jpg",
-  traits: {
-    zodiac: "pisces", 
-    mbti: "ISFJ",     
-    blood: "AB",      
-    element: "water", 
-    energy: "soft",
-    dayMaster: "乙木" 
-  }
+"Leeseo (IVE)": {
+  img: "images/leeseo.jpg",
+  // 2007-02-21  双鱼 water  丁
+  traits: { zodiac: "pisces", mbti: "ESTP", blood: "O", element: "water", energy: "fun", dayMaster: "丁火" }
 },
-"Taehyun (TXT)": {
-  img: "images/taehyun.jpg",
-  traits: {
-    zodiac: "aquarius", 
-    mbti: "ESTP",       
-    blood: "A",       
-    element: "air",     
-    energy: "cool",
-    dayMaster: "甲木"   
-  }
-},
-"Hueningkai (TXT)": {
-  img: "images/hueningkai.jpg",
-  traits: {
-    zodiac: "leo", 
-    mbti: "ISTP",  
-    blood: "O",    
-    element: "fire",
-    energy: "soft",
-    dayMaster: "甲木" 
-  }
-},
-  // --- NCT ---
-  "Taeyong (NCT)": { img: "images/taeyong.jpg", traits: { zodiac: "cancer", mbti: "ENTP", blood: "O", element: "water", energy: "cool", dayMaster: "癸水" }},
-  "Mark (NCT)": { img: "images/mark.jpg", traits: { zodiac: "leo", mbti: "INFJ", blood: "A", element: "fire", energy: "calm", dayMaster: "戊土" }},
-  "Jaehyun (NCT)": { img: "images/jaehyun2.jpg", traits: { zodiac: "aquarius", mbti: "ESTP", blood: "A", element: "air", energy: "cool", dayMaster: "丁火" }},
-  "Jaemin (NCT)": { img: "images/jaemin.jpg", traits: { zodiac: "leo", mbti: "ISFJ", blood: "AB", element: "fire", energy: "fun", dayMaster: "癸水" }},
-  "Doyoung (NCT)": { img: "images/doyoung.jpg", traits: { zodiac: "aquarius", mbti: "ISFJ", blood: "B", element: "air", energy: "calm", dayMaster: "戊土" }},
-  "Jeno (NCT)": { img: "images/jeno.jpg", traits: { zodiac: "taurus", mbti: "ISFP", blood: "A", element: "earth", energy: "calm", dayMaster: "甲木" }},
-  "Jisung (NCT)": { img: "images/jisung.jpg", traits: { zodiac: "aquarius", mbti: "INFP", blood: "O", element: "air", energy: "soft", dayMaster: "甲木" }},
-  "Ten (NCT)": { img: "images/ten.jpg", traits: { zodiac: "pisces", mbti: "INFJ", blood: "A", element: "water", energy: "cool", dayMaster: "甲木" }},
-//ald1
-  "Xinlong (ALD1)": { 
-    img: "images/xinlong.jpg", 
-    traits: { 
-      zodiac: "pisces", 
-      mbti: "INFJ", 
-      blood: "O", 
-      element: "water", 
-      energy: "cool", 
-      dayMaster: "丙火" 
-    } 
+  // ─── HYBE · Source Music · LE SSERAFIM ───────────────────
+  "Chaewon (LE SSERAFIM)": {
+    img: "images/chaewon.jpg",
+    traits: {
+      zodiac: "leo",
+      mbti: "ESTP",
+      blood: "B",
+      element: "fire",
+      energy: "fun",
+      dayMaster: "壬水"
+    }
   },
-  "Anxin (ALD1)": { 
-    img: "images/anxin.jpg", 
-    traits: { 
-      zodiac: "sagittarius", 
-      mbti: "ENTP", 
-      blood: "O", // 血型未知时，默认填O或A比较稳妥
-      element: "fire", 
-      energy: "fun", 
-      dayMaster: "己土" 
-    } 
+  "Sakura (LE SSERAFIM)": {
+    img: "images/sakura.jpg",
+    traits: {
+      zodiac: "pisces",
+      mbti: "INTP",
+      blood: "O",
+      element: "water",
+      energy: "soft",
+      dayMaster: "丙火"
+    }
   },
-  "Arno (ALD1)": { 
-    img: "images/arno.jpg", 
-    traits: { 
-      zodiac: "cancer", 
-      mbti: "INTJ", 
-      blood: "O", 
-      element: "water", 
-      energy: "calm", 
-      dayMaster: "辛金" 
-    } 
+  "Yunjin (LE SSERAFIM)": {
+    img: "images/yunjin.jpg",
+    traits: {
+      zodiac: "libra",
+      mbti: "ENFJ",
+      blood: "B",
+      element: "air",
+      energy: "fun",
+      dayMaster: "乙木"
+    }
   },
-  "Sangwon (ALD1)": { 
-    img: "images/sangwon.jpg", 
-    traits: { 
-      zodiac: "taurus", 
-      mbti: "INFP", 
-      blood: "B", 
-      element: "earth", 
-      energy: "soft", 
-      dayMaster: "丙火" 
-    } 
+  "Kazuha (LE SSERAFIM)": {
+    img: "images/kazuha.jpg",
+    traits: {
+      zodiac: "leo",
+      mbti: "INFJ",
+      blood: "-",
+      element: "fire",
+      energy: "soft",
+      dayMaster: "乙木"
+    }
   },
-  "Sanghyeon (ALD1)": { 
-    img: "images/sanghyeon.jpg", 
-    traits: { 
-      zodiac: "virgo", 
-      mbti: "ENFJ", 
-      blood: "B", 
-      element: "earth", 
-      energy: "soft", 
-      dayMaster: "丁火" 
-    } 
+  "Eunchae (LE SSERAFIM)": {
+    img: "images/eunchae.jpg",
+    traits: {
+      zodiac: "scorpio",
+      mbti: "ISTJ",
+      blood: "A",
+      element: "water",
+      energy: "fun",
+      dayMaster: "甲木"
+    }
   },
-  // --- EXO ---
-  "Baekhyun (EXO)": { 
-    img: "images/baekhyun.jpg", 
-    traits: { 
-      zodiac: "taurus", mbti: "ESTP", blood: "O", element: "earth", energy: "fun", dayMaster: "壬水" 
-    } 
-  },
-  "Chanyeol (EXO)": { 
-    img: "images/chanyeol.jpg", 
-    traits: { 
-      zodiac: "sagittarius", mbti: "ENFP", blood: "A", element: "fire", energy: "fun", dayMaster: "丁火" 
-    } 
-  },
-  "Kai (EXO)": { 
-    img: "images/kai.jpg", 
-    traits: { 
-      zodiac: "capricorn", mbti: "INFJ", blood: "A", element: "earth", energy: "cool", dayMaster: "辛金" 
-    } 
-  },
-  "Sehun (EXO)": { img: "images/sehun.jpg", traits: { zodiac: "aries", mbti: "INTP", blood: "O", element: "fire", energy: "cool", dayMaster: "戊土" }},
-  "Lay (EXO)": { img: "images/lay.jpg", traits: { zodiac: "libra", mbti: "ENFJ", blood: "A", element: "air", energy: "calm", dayMaster: "庚金" }},
-  // --- BND ---
-  "Jaehyun (BND)": { img: "images/jaehyun1.jpg", traits: { zodiac: "sagittarius", mbti: "ENFP", blood: "A", element: "fire", energy: "fun", dayMaster: "辛金" }},
-  "Taesan (BND)": { img: "images/taesan.jpg", traits: { zodiac: "leo", mbti: "INTJ", blood: "A", element: "fire", energy: "cool", dayMaster: "辛金" }},
-  "Leehan (BND)": { img: "images/leehan.jpg", traits: { zodiac: "libra", mbti: "ESFJ", blood: "O", element: "air", energy: "soft", dayMaster: "壬水" }},
-// --- ZEROBASEONE (ZB1) ---
-  "Zhang Hao (ZB1)": { img: "images/zhanghao.jpg", traits: { zodiac: "leo", mbti: "ISFP", blood: "A", element: "fire", energy: "soft", dayMaster: "甲木" }},
-  "Sung Han Bin (ZB1)": { img: "images/sunghanbin.jpg", traits: { zodiac: "gemini", mbti: "ENFJ", blood: "O", element: "air", energy: "soft", dayMaster: "丁火" }},
-  "Ricky (ZB1)": { img: "images/ricky.jpg", traits: { zodiac: "taurus", mbti: "unsigned", blood: "O", element: "earth", energy: "cool", dayMaster: "己土" }},
-  "Park Gun Wook (ZB1)": { img: "images/gunwook.jpg", traits: { zodiac: "capricorn", mbti: "ENFJ", blood: "O", element: "earth", energy: "cool", dayMaster: "甲木" }},
-  "Kim Gyu Vin (ZB1)": { img: "images/gyuvin.jpg", traits: { zodiac: "virgo", mbti: "ENFP", blood: "B", element: "earth", energy: "fun", dayMaster: "乙木" }},
-  "Han Yu Jin (ZB1)": { img: "images/yujin.jpg", traits: { zodiac: "pisces", mbti: "ENFP", blood: "O", element: "water", energy: "soft", dayMaster: "癸水" }},
-  // --- BTS ---
-  "Jin (BTS)": { img: "images/jin.jpg", traits: { zodiac: "sagittarius", mbti: "INTP", blood: "O", element: "fire", energy: "fun", dayMaster: "甲木" }},
-  "SUGA (BTS)": { img: "images/suga.jpg", traits: { zodiac: "pisces", mbti: "INTP", blood: "O", element: "water", energy: "cool", dayMaster: "乙木" }},
-  "j-hope (BTS)": { img: "images/jhope.jpg", traits: { zodiac: "aquarius", mbti: "ESFJ", blood: "A", element: "air", energy: "fun", dayMaster: "乙木" }},
-  "Jimin (BTS)": { img: "images/jimin.jpg", traits: { zodiac: "libra", mbti: "ENFJ", blood: "A", element: "air", energy: "soft", dayMaster: "丁火" }},
-  "V (BTS)": { img: "images/v.jpg", traits: { zodiac: "capricorn", mbti: "ENFP", blood: "AB", element: "earth", energy: "cool", dayMaster: "乙木" }},
-  "Jungkook (BTS)": { img: "images/jungkook.jpg", traits: { zodiac: "virgo", mbti: "INTP", blood: "A", element: "earth", energy: "cool", dayMaster: "丙火" }},
-// --- NCT WISH ---
-  "Sion (NCT WISH)": { img: "images/sion.jpg", traits: { zodiac: "taurus", mbti: "INTJ", blood: "O", element: "earth", energy: "cool", dayMaster: "己土" }},
-  "Riku (NCT WISH)": { img: "images/riku.jpg", traits: { zodiac: "cancer", mbti: "ISFP", blood: "B", element: "water", energy: "soft", dayMaster: "壬水" }},
-  "Yushi (NCT WISH)": { img: "images/yushi.jpg", traits: { zodiac: "aries", mbti: "ISFJ", blood: "A", element: "fire", energy: "calm", dayMaster: "甲木" }},
-  "Sakuya (NCT WISH)": { img: "images/sakuya.jpg", traits: { zodiac: "scorpio", mbti: "ENFP", blood: "AB", element: "water", energy: "fun", dayMaster: "丙火" }},
-  //NEXZ
-  "Tomoya(NEXZ)":{img:"images/tomoya.jpg",traits: { zodiac: "capricorn", mbti: "ENFj", blood: "A", element: "earth", energy: "soft", dayMaster: "丁火" }},
-  "Yuki(NEXZ)":{ img: "images/yuki.jpg", traits: { zodiac: "virgo", mbti: "INTP", blood: "AB", element: "earth", energy: "calm", dayMaster: "丁火" }},
-  // --- CORTIS ---
-  "Martin (CORTIS)": { img: "images/martin.jpg", traits: { zodiac: "pisces", mbti: "ENTP", blood: "O", element: "water", energy: "soft", dayMaster: "己土" }},
-  "Juhoon (CORTIS)": { img: "images/juhoon.jpg", traits: { zodiac: "capricorn", mbti: "ISFP", blood: "O", element: "earth", energy: "calm", dayMaster: "壬水" }},
-  "Seonghyeon (CORTIS)": { img: "images/seonghyeon.jpg", traits: { zodiac: "capricorn", mbti: "INTP", blood: "A", element: "earth", energy: "soft", dayMaster: "戊土" }},
-  "Keonho (CORTIS)": { img: "images/keonho.jpg", traits: { zodiac: "aquarius", mbti: "INTP", blood: "O", element: "air", energy: "fun", dayMaster: "庚金" }}
-}; // 确保这里是括号加分号结束
-
+};
   const zodiacElement = {
   aries: "fire", taurus: "earth", gemini: "air", cancer: "water",
   leo: "fire", virgo: "earth", libra: "air", scorpio: "water",
