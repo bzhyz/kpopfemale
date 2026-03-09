@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>KPOP偶像命理匹配测试 · Ultimate</title>
+
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(135deg,#1f1c2c,#928dab);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;color:#222}
+.app{width:100%;max-width:900px;background:white;border-radius:20px;padding:36px;box-shadow:0 30px 80px rgba(0,0,0,.3)}
+h1{text-align:center;margin-top:0}
+.subtitle{text-align:center;color:#666;margin-bottom:25px}
+.section{margin-bottom:22px}
+label{display:block;font-weight:bold;margin-bottom:6px}
+input,select{width:100%;padding:10px;border-radius:8px;border:1px solid #ccc}
+button{border:none;border-radius:10px;padding:14px 18px;font-size:16px;cursor:pointer;background:black;color:white}
+.option{width:100%;margin:8px 0;background:#f3f3f3;color:black;text-align:left}
+.option:hover{background:#e8e8e8}
+.progress{height:8px;background:#eee;border-radius:20px;margin-bottom:20px;overflow:hidden}
+.progress-bar{height:100%;background:black;width:0%}
+.question{font-size:20px;margin-bottom:10px}
+.hidden{display:none}
+.result{text-align:center}
+.result img{width:200px;border-radius:14px;margin-top:10px}
+.rank{margin-top:20px;text-align:left}
+.rank-item{padding:8px 0;border-bottom:1px solid #eee}
+.percent{float:right;color:#666}
+.actions{margin-top:22px}
+.secondary{background:#eee;color:black;margin-left:10px}
+.badge{display:inline-block;background:#eee;padding:4px 10px;border-radius:20px;margin:3px;font-size:12px}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<h1>🔮 KPOP偶像命理匹配</h1>
+<p class="subtitle">星座 · MBTI · 血型 · 八字五行 · 性格能量 综合算法</p>
+
+
+<!-- 用户信息 -->
+
+<div id="profileScreen">
+
+<div class="section">
+<label>你的星座</label>
+<select id="zodiac">
+<option value="aries">白羊座 (Aries)</option>
+<option value="taurus">金牛座 (Taurus)</option>
+<option value="gemini">双子座 (Gemini)</option>
+<option value="cancer">巨蟹座 (Cancer)</option>
+<option value="leo">狮子座 (Leo)</option>
+<option value="virgo">处女座 (Virgo)</option>
+<option value="libra">天秤座 (Libra)</option>
+<option value="scorpio">天蝎座 (Scorpio)</option>
+<option value="sagittarius">射手座 (Sagittarius)</option>
+<option value="capricorn">摩羯座 (Capricorn)</option>
+<option value="aquarius">水瓶座 (Aquarius)</option>
+<option value="pisces">双鱼座 (Pisces)</option>
+</select>
+</div>
+
+<div class="section">
+<label>你的MBTI</label>
+<input id="mbti" placeholder="例如 INFP(大写)" />
+</div>
+
+<div class="section">
+<label>你的血型</label>
+<select id="blood">
+<option>A</option>
+<option>B</option>
+<option>O</option>
+<option>AB</option>
+</select>
+</div>
+
+<div class="section">
+<label>你的八字日主</label>
+<select id="bazi">
+<option>甲木</option>
+<option>乙木</option>
+<option>丙火</option>
+<option>丁火</option>
+<option>戊土</option>
+<option>己土</option>
+<option>庚金</option>
+<option>辛金</option>
+<option>壬水</option>
+<option>癸水</option>
+</select>
+</div>
+
+<div style="text-align:center">
+<button onclick="startQuiz()">开始匹配</button>
+</div>
+
+</div>
+
+
+<!-- 问答 -->
+
+<div id="quizScreen" class="hidden">
+<div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+<div id="questionBox"></div>
+<div id="optionsBox"></div>
+</div>
+
+
+<!-- 结果 -->
+
+<div id="resultScreen" class="hidden result"></div>
+
+</div>
+
+<script>
+
+/* ============================
+IDOL 数据
+============================ */
+/* ============================
+IDOL 数据 (已修复语法错误)
+============================ */
+const IDOLS = {
+  // --- TWS ---
+  "Shinyu (TWS)": { img: "images/shinyu.jpg", traits: { zodiac: "scorpio", mbti: "INFP", blood: "O", element: "water", energy: "soft", dayMaster: "甲木" }},
+  "Dohoon (TWS)": { img: "images/dohoon.jpg", traits: { zodiac: "aquarius", mbti: "ISTP", blood: "B", element: "air", energy: "cool", dayMaster: "甲木" }},
+  "Youngjae (TWS)": { img: "images/youngjae.jpg", traits: { zodiac: "gemini", mbti: "ISFJ", blood: "AB", element: "air", energy: "calm", dayMaster: "乙木" }},
+  "Hanjin (TWS)": { img: "images/hanjin.jpg", traits: { zodiac: "capricorn", mbti: "INFJ", blood: "O", element: "earth", energy: "calm", dayMaster: "甲木" }},
+
+  // --- RIIZE ---
+  "Shotaro (RIIZE)": { img: "images/shotaro.jpg", traits: { zodiac: "sagittarius", mbti: "ESFP", blood: "A", element: "fire", energy: "fun", dayMaster: "丁火" }},
+  "Sungchan (RIIZE)": { img: "images/sungchan.jpg", traits: { zodiac: "virgo", mbti: "ESTP", blood: "A", element: "earth", energy: "fun", dayMaster: "己土" }},
+  "Wonbin (RIIZE)": { img: "images/wonbin.jpg", traits: { zodiac: "pisces", mbti: "ISTJ", blood: "AB", element: "water", energy: "cool", dayMaster: "己土" }},
+  "Anton (RIIZE)": { img: "images/anton.jpg", traits: { zodiac: "aries", mbti: "INTP", blood: "O", element: "fire", energy: "soft", dayMaster: "己土" }},
+
+  // --- ENHYPEN ---
+  "Jungwon (ENHYPEN)": { img: "images/jungwon.jpg", traits: { zodiac: "aquarius", mbti: "ISTJ", blood: "AB", element: "air", energy: "calm", dayMaster: "戊土" }},
+  "Heeseung (ENHYPEN)": { img: "images/heeseung.jpg", traits: { zodiac: "libra", mbti: "INTP", blood: "A", element: "air", energy: "cool", dayMaster: "辛金" }},
+  "Jay (ENHYPEN)": { img: "images/jay.jpg", traits: { zodiac: "taurus", mbti: "ENTP", blood: "B", element: "earth", energy: "cool", dayMaster: "戊土" }},
+  "Sunghoon (ENHYPEN)": { img: "images/sunghoon.jpg", traits: { zodiac: "sagittarius", mbti: "ISTJ", blood: "O", element: "fire", energy: "cool", dayMaster: "庚金" }},
+  "Sunoo (ENHYPEN)": { img: "images/sunoo.jpg", traits: { zodiac: "cancer", mbti: "ENFP", blood: "O", element: "water", energy: "soft", dayMaster: "戊土" }},
+  "Ni-ki (ENHYPEN)": { img: "images/niki.jpg", traits: { zodiac: "sagittarius", mbti: "ENFJ", blood: "B", element: "fire", energy: "cool", dayMaster: "丁火" }},
+
+  // --- SVT ---
+  "S.Coups (SVT)": { img: "images/scoups.jpg", traits: { zodiac: "leo", mbti: "INFP", blood: "AB", element: "fire", energy: "cool", dayMaster: "辛金" }},
+  "Jeonghan (SVT)": { img: "images/jeonghan.jpg", traits: { zodiac: "libra", mbti: "ISFJ", blood: "B", element: "air", energy: "soft", dayMaster: "戊土" }},
+  "Hoshi (SVT)": { img: "images/hoshi.jpg", traits: { zodiac: "gemini", mbti: "INTJ", blood: "B", element: "air", energy: "fun", dayMaster: "癸水" }},
+  "Wonwoo (SVT)": { img: "images/wonwoo.jpg", traits: { zodiac: "cancer", mbti: "INFJ", blood: "A", element: "water", energy: "cool", dayMaster: "乙木" }},
+  "Mingyu (SVT)": { img: "images/mingyu.jpg", traits: { zodiac: "aries", mbti: "ENFJ", blood: "B", element: "fire", energy: "fun", dayMaster: "戊土" }},
+  "DK (SVT)": { img: "images/dk.jpg", traits: { zodiac: "aquarius", mbti: "INFP", blood: "O", element: "air", energy: "fun", dayMaster: "辛金" }},
+  "Vernon (SVT)": { img: "images/vernon.jpg", traits: { zodiac: "aquarius", mbti: "ENTP", blood: "A", element: "air", energy: "cool", dayMaster: "丙火" }},
+
+  // --- SKZ ---
+  "Bang Chan (SKZ)": { img: "images/bangchan.jpg", traits: { zodiac: "libra", mbti: "ENFJ", blood: "O", element: "air", energy: "cool", dayMaster: "戊土" }},
+  "Hyunjin (SKZ)": { img: "images/hyunjin.jpg", traits: { zodiac: "pisces", mbti: "INFP", blood: "B", element: "water", energy: "soft", dayMaster: "丁火" }},
+  "Felix (SKZ)": { img: "images/felix.jpg", traits: { zodiac: "virgo", mbti: "ESFJ", blood: "AB", element: "earth", energy: "soft", dayMaster: "丙火" }},
+//tearuse
+  "Hyunsuk (TREASURE)": {
+  img: "images/hyunsuk.jpg",
+  traits: {
+    zodiac: "taurus",
+    mbti: "ENFP",
+    blood: "A",
+    element: "earth",
+    energy: "fun",
+    dayMaster: "癸水"
+  }
+},
+"Jihoon (TREASURE)": {
+  img: "images/jihoon.jpg",
+  traits: {
+    zodiac: "pisces",
+    mbti: "ENTJ",
+    blood: "B",
+    element: "water",
+    energy: "cool",
+    dayMaster: "辛金"
+  }
+},
+"Yoshi (TREASURE)": {
+  img: "images/yoshi.jpg",
+  traits: {
+    zodiac: "taurus",
+    mbti: "INFP",
+    blood: "A",
+    element: "earth",
+    energy: "soft",
+    dayMaster: "癸水"
+  }
+},
+
+"Asahi(TREASURE)": {
+  img: "images/asahi.jpg",
+  traits: {
+    zodiac: "leo",
+    mbti: "INFP",
+    blood: "AB",
+    element: "fire",
+    energy: "soft",
+    dayMaster: "乙木"
+  }
+},
+"Haruto (TREASURE)": {
+  img: "images/haruto.jpg",
+  traits: {
+    zodiac: "aries",
+    mbti: "ISFP",
+    blood: "B",
+    element: "fire",
+    energy: "calm",
+    dayMaster: "甲木"
+  }
+},
+"Junkyu(TREASURE)": {
+  img: "images/junkyu.jpg",
+  traits: {
+    zodiac: "virgo",
+    mbti: "INFP",
+    blood: "O",
+    element: "earth",
+    energy: "soft",
+    dayMaster: "庚金"
+  }
+},
+  "Yeonjun (TXT)": {
+  img: "images/yeonjun.jpg",
+  traits: {
+    zodiac: "virgo", 
+    mbti: "ENFP",  
+    blood: "A",     
+    element: "earth",
+    energy: "cool",
+    dayMaster: "戊土"
+  }
+},
+"Soobin (TXT)": {
+  img: "images/soobin.jpg",
+  traits: {
+    zodiac: "sagittarius", 
+    mbti: "ISFP",          
+    blood: "A",            
+    element: "fire",       
+    energy: "soft",
+    dayMaster: "丁火"     
+  }
+},
+"Beomgyu (TXT)": {
+  img: "images/beomgyu.jpg",
+  traits: {
+    zodiac: "pisces", 
+    mbti: "ISFJ",     
+    blood: "AB",      
+    element: "water", 
+    energy: "soft",
+    dayMaster: "乙木" 
+  }
+},
+"Taehyun (TXT)": {
+  img: "images/taehyun.jpg",
+  traits: {
+    zodiac: "aquarius", 
+    mbti: "ESTP",       
+    blood: "A",       
+    element: "air",     
+    energy: "cool",
+    dayMaster: "甲木"   
+  }
+},
+"Hueningkai (TXT)": {
+  img: "images/hueningkai.jpg",
+  traits: {
+    zodiac: "leo", 
+    mbti: "ISTP",  
+    blood: "O",    
+    element: "fire",
+    energy: "soft",
+    dayMaster: "甲木" 
+  }
+},
+  // --- NCT ---
+  "Taeyong (NCT)": { img: "images/taeyong.jpg", traits: { zodiac: "cancer", mbti: "ENTP", blood: "O", element: "water", energy: "cool", dayMaster: "癸水" }},
+  "Mark (NCT)": { img: "images/mark.jpg", traits: { zodiac: "leo", mbti: "INFJ", blood: "A", element: "fire", energy: "calm", dayMaster: "戊土" }},
+  "Jaehyun (NCT)": { img: "images/jaehyun2.jpg", traits: { zodiac: "aquarius", mbti: "ESTP", blood: "A", element: "air", energy: "cool", dayMaster: "丁火" }},
+  "Jaemin (NCT)": { img: "images/jaemin.jpg", traits: { zodiac: "leo", mbti: "ISFJ", blood: "AB", element: "fire", energy: "fun", dayMaster: "癸水" }},
+  "Doyoung (NCT)": { img: "images/doyoung.jpg", traits: { zodiac: "aquarius", mbti: "ISFJ", blood: "B", element: "air", energy: "calm", dayMaster: "戊土" }},
+  "Jeno (NCT)": { img: "images/jeno.jpg", traits: { zodiac: "taurus", mbti: "ISFP", blood: "A", element: "earth", energy: "calm", dayMaster: "甲木" }},
+  "Jisung (NCT)": { img: "images/jisung.jpg", traits: { zodiac: "aquarius", mbti: "INFP", blood: "O", element: "air", energy: "soft", dayMaster: "甲木" }},
+  "Ten (NCT)": { img: "images/ten.jpg", traits: { zodiac: "pisces", mbti: "INFJ", blood: "A", element: "water", energy: "cool", dayMaster: "甲木" }},
+//ald1
+  "Xinlong (ALD1)": { 
+    img: "images/xinlong.jpg", 
+    traits: { 
+      zodiac: "pisces", 
+      mbti: "INFJ", 
+      blood: "O", 
+      element: "water", 
+      energy: "cool", 
+      dayMaster: "丙火" 
+    } 
+  },
+  "Anxin (ALD1)": { 
+    img: "images/anxin.jpg", 
+    traits: { 
+      zodiac: "sagittarius", 
+      mbti: "ENTP", 
+      blood: "O", // 血型未知时，默认填O或A比较稳妥
+      element: "fire", 
+      energy: "fun", 
+      dayMaster: "己土" 
+    } 
+  },
+  "Arno (ALD1)": { 
+    img: "images/arno.jpg", 
+    traits: { 
+      zodiac: "cancer", 
+      mbti: "INTJ", 
+      blood: "O", 
+      element: "water", 
+      energy: "calm", 
+      dayMaster: "辛金" 
+    } 
+  },
+  "Sangwon (ALD1)": { 
+    img: "images/sangwon.jpg", 
+    traits: { 
+      zodiac: "taurus", 
+      mbti: "INFP", 
+      blood: "B", 
+      element: "earth", 
+      energy: "soft", 
+      dayMaster: "丙火" 
+    } 
+  },
+  "Sanghyeon (ALD1)": { 
+    img: "images/sanghyeon.jpg", 
+    traits: { 
+      zodiac: "virgo", 
+      mbti: "ENFJ", 
+      blood: "B", 
+      element: "earth", 
+      energy: "soft", 
+      dayMaster: "丁火" 
+    } 
+  },
+  // --- EXO ---
+  "Baekhyun (EXO)": { 
+    img: "images/baekhyun.jpg", 
+    traits: { 
+      zodiac: "taurus", mbti: "ESTP", blood: "O", element: "earth", energy: "fun", dayMaster: "壬水" 
+    } 
+  },
+  "Chanyeol (EXO)": { 
+    img: "images/chanyeol.jpg", 
+    traits: { 
+      zodiac: "sagittarius", mbti: "ENFP", blood: "A", element: "fire", energy: "fun", dayMaster: "丁火" 
+    } 
+  },
+  "Kai (EXO)": { 
+    img: "images/kai.jpg", 
+    traits: { 
+      zodiac: "capricorn", mbti: "INFJ", blood: "A", element: "earth", energy: "cool", dayMaster: "辛金" 
+    } 
+  },
+  "Sehun (EXO)": { img: "images/sehun.jpg", traits: { zodiac: "aries", mbti: "INTP", blood: "O", element: "fire", energy: "cool", dayMaster: "戊土" }},
+  "Lay (EXO)": { img: "images/lay.jpg", traits: { zodiac: "libra", mbti: "ENFJ", blood: "A", element: "air", energy: "calm", dayMaster: "庚金" }},
+  // --- BND ---
+  "Jaehyun (BND)": { img: "images/jaehyun1.jpg", traits: { zodiac: "sagittarius", mbti: "ENFP", blood: "A", element: "fire", energy: "fun", dayMaster: "辛金" }},
+  "Taesan (BND)": { img: "images/taesan.jpg", traits: { zodiac: "leo", mbti: "INTJ", blood: "A", element: "fire", energy: "cool", dayMaster: "辛金" }},
+  "Leehan (BND)": { img: "images/leehan.jpg", traits: { zodiac: "libra", mbti: "ESFJ", blood: "O", element: "air", energy: "soft", dayMaster: "壬水" }},
+// --- ZEROBASEONE (ZB1) ---
+  "Zhang Hao (ZB1)": { img: "images/zhanghao.jpg", traits: { zodiac: "leo", mbti: "ISFP", blood: "A", element: "fire", energy: "soft", dayMaster: "甲木" }},
+  "Sung Han Bin (ZB1)": { img: "images/sunghanbin.jpg", traits: { zodiac: "gemini", mbti: "ENFJ", blood: "O", element: "air", energy: "soft", dayMaster: "丁火" }},
+  "Ricky (ZB1)": { img: "images/ricky.jpg", traits: { zodiac: "taurus", mbti: "unsigned", blood: "O", element: "earth", energy: "cool", dayMaster: "己土" }},
+  "Park Gun Wook (ZB1)": { img: "images/gunwook.jpg", traits: { zodiac: "capricorn", mbti: "ENFJ", blood: "O", element: "earth", energy: "cool", dayMaster: "甲木" }},
+  "Kim Gyu Vin (ZB1)": { img: "images/gyuvin.jpg", traits: { zodiac: "virgo", mbti: "ENFP", blood: "B", element: "earth", energy: "fun", dayMaster: "乙木" }},
+  "Han Yu Jin (ZB1)": { img: "images/yujin.jpg", traits: { zodiac: "pisces", mbti: "ENFP", blood: "O", element: "water", energy: "soft", dayMaster: "癸水" }},
+  // --- BTS ---
+  "Jin (BTS)": { img: "images/jin.jpg", traits: { zodiac: "sagittarius", mbti: "INTP", blood: "O", element: "fire", energy: "fun", dayMaster: "甲木" }},
+  "SUGA (BTS)": { img: "images/suga.jpg", traits: { zodiac: "pisces", mbti: "INTP", blood: "O", element: "water", energy: "cool", dayMaster: "乙木" }},
+  "j-hope (BTS)": { img: "images/jhope.jpg", traits: { zodiac: "aquarius", mbti: "ESFJ", blood: "A", element: "air", energy: "fun", dayMaster: "乙木" }},
+  "Jimin (BTS)": { img: "images/jimin.jpg", traits: { zodiac: "libra", mbti: "ENFJ", blood: "A", element: "air", energy: "soft", dayMaster: "丁火" }},
+  "V (BTS)": { img: "images/v.jpg", traits: { zodiac: "capricorn", mbti: "ENFP", blood: "AB", element: "earth", energy: "cool", dayMaster: "乙木" }},
+  "Jungkook (BTS)": { img: "images/jungkook.jpg", traits: { zodiac: "virgo", mbti: "INTP", blood: "A", element: "earth", energy: "cool", dayMaster: "丙火" }},
+// --- NCT WISH ---
+  "Sion (NCT WISH)": { img: "images/sion.jpg", traits: { zodiac: "taurus", mbti: "INTJ", blood: "O", element: "earth", energy: "cool", dayMaster: "己土" }},
+  "Riku (NCT WISH)": { img: "images/riku.jpg", traits: { zodiac: "cancer", mbti: "ISFP", blood: "B", element: "water", energy: "soft", dayMaster: "壬水" }},
+  "Yushi (NCT WISH)": { img: "images/yushi.jpg", traits: { zodiac: "aries", mbti: "ISFJ", blood: "A", element: "fire", energy: "calm", dayMaster: "甲木" }},
+  "Sakuya (NCT WISH)": { img: "images/sakuya.jpg", traits: { zodiac: "scorpio", mbti: "ENFP", blood: "AB", element: "water", energy: "fun", dayMaster: "丙火" }},
+  //NEXZ
+  "Tomoya(NEXZ)":{img:"images/tomoya.jpg",traits: { zodiac: "capricorn", mbti: "ENFj", blood: "A", element: "earth", energy: "soft", dayMaster: "丁火" }},
+  "Yuki(NEXZ)":{ img: "images/yuki.jpg", traits: { zodiac: "virgo", mbti: "INTP", blood: "AB", element: "earth", energy: "calm", dayMaster: "丁火" }},
+  // --- CORTIS ---
+  "Martin (CORTIS)": { img: "images/martin.jpg", traits: { zodiac: "pisces", mbti: "ENTP", blood: "O", element: "water", energy: "soft", dayMaster: "己土" }},
+  "Juhoon (CORTIS)": { img: "images/juhoon.jpg", traits: { zodiac: "capricorn", mbti: "ISFP", blood: "O", element: "earth", energy: "calm", dayMaster: "壬水" }},
+  "Seonghyeon (CORTIS)": { img: "images/seonghyeon.jpg", traits: { zodiac: "capricorn", mbti: "INTP", blood: "A", element: "earth", energy: "soft", dayMaster: "戊土" }},
+  "Keonho (CORTIS)": { img: "images/keonho.jpg", traits: { zodiac: "aquarius", mbti: "INTP", blood: "O", element: "air", energy: "fun", dayMaster: "庚金" }}
+}; // 确保这里是括号加分号结束
+
+  const zodiacElement = {
+  aries: "fire", taurus: "earth", gemini: "air", cancer: "water",
+  leo: "fire", virgo: "earth", libra: "air", scorpio: "water",
+  sagittarius: "fire", capricorn: "earth", aquarius: "air", pisces: "water"
+};
+
+const elementGenerate = { wood: "fire", fire: "earth", earth: "metal", metal: "water", water: "wood" };
+
+const baziMap = {
+  "甲木": ["庚金", "癸水"], "乙木": ["癸水", "丙火", "甲木"], "丙火": ["甲木", "壬水"],
+  "丁火": ["乙木", "甲木"], "戊土": ["丙火", "甲木"], "己土": ["丙火", "癸水"],
+  "庚金": ["丁火"], "辛金": ["壬水", "己土"], "壬水": ["庚金", "戊土"], "癸水": ["辛金", "丙火"]
+};
+
+const mbtiMatch = {
+  "INFP": ["ENFJ", "ENTJ"], "ENFP": ["INFJ", "INTJ"], "INFJ": ["ENFP", "ENTP"],
+  "ENFJ": ["INFP", "ISFP"], "INTJ": ["ENFP", "ENTP"], "ENTJ": ["INFP", "INTP"],
+  "INTP": ["ENTJ", "ESTJ"], "ENTP": ["INFJ", "INTJ"], "ISFP": ["ENFJ", "ESFJ", "ESTJ"],
+  "ESFP": ["ISFJ", "ISTJ"], "ISTP": ["ESFJ", "ESTJ"], "ESTP": ["ISFJ", "ISTJ"],
+  "ISFJ": ["ESFP", "ESTP"], "ESFJ": ["ISFP", "ISTP"], "ISTJ": ["ESFP", "ESTP"], "ESTJ": ["INTP", "ISTP"]
+};
+/* ============================
+升级版：性格能量深度测试题库
+============================ */
+const QUESTIONS = [
+  {
+    question: "当你在一个完全陌生的派对上，你通常会？",
+    options: [
+      { text: "独自靠在角落，散发‘别惹我’的清冷魅力", value: "cool" },
+      { text: "主动出击，迅速跟所有人打成一片", value: "fun" },
+      { text: "微笑聆听，给每一个说话的人提供情绪价值", value: "soft" },
+      { text: "安静观察，分析这个局有哪些有意思的人", value: "calm" }
+    ]
+  },
+  {
+    question: "如果让你策划一场个人舞台，你更倾向于？",
+    options: [
+      { text: "全场全开麦的高燃黑衣Rap，眼神杀全场", value: "cool" },
+      { text: "色彩斑斓的互动舞台，跟伴舞和观众玩起来", value: "fun" },
+      { text: "充满艺术感的现代舞或治愈情歌，氛围感拉满", value: "soft" },
+      { text: "每一个卡点都极其精准、动作干练的教科书级表演", value: "calm" }
+    ]
+  },
+  {
+    question: "压力很大的时候，你通常怎么排解？",
+    options: [
+      { text: "一个人去疯狂健身或购物，用‘狠劲’消解压力", value: "cool" },
+      { text: "拉上好朋友去KTV蹦迪或大吃一顿，在热闹中忘记", value: "fun" },
+      { text: "躲在被窝里看部感人的电影，痛痛快快哭一场", value: "soft" },
+      { text: "写复盘日记，通过逻辑分析找出问题的最优解", value: "calm" }
+    ]
+  },
+  {
+    question: "理想的旅行目的地是？",
+    options: [
+      { text: "时尚之都（如巴黎、纽约），走在街头就是大片", value: "cool" },
+      { text: "游乐园或海岛狂欢节，一定要够刺激、够热闹", value: "fun" },
+      { text: "开满鲜花的小镇，可以漫步画廊和吃甜品", value: "soft" },
+      { text: "深山里的避世古寺或森林，寻求内心的极度宁静", value: "calm" }
+    ]
+  }
+];
+/* ============================
+用户数据
+============================ */
+
+let user = {};
+let personality = {};
+let index = 0;
+
+const profileScreen = document.getElementById("profileScreen");
+const quizScreen = document.getElementById("quizScreen");
+const resultScreen = document.getElementById("resultScreen");
+const questionBox = document.getElementById("questionBox");
+const optionsBox = document.getElementById("optionsBox");
+const progressBar = document.getElementById("progressBar");
+
+function startQuiz() {
+  user.zodiac = document.getElementById("zodiac").value;
+  user.mbti = document.getElementById("mbti").value.toUpperCase();
+  user.blood = document.getElementById("blood").value;
+  user.bazi = document.getElementById("bazi").value;
+
+  if(!user.mbti || user.mbti.length !== 4) {
+    alert("请输入正确的4位MBTI代码");
+    return;
+  }
+
+  profileScreen.classList.add("hidden");
+  quizScreen.classList.remove("hidden");
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = QUESTIONS[index];
+  progressBar.style.width = (index / QUESTIONS.length * 100) + "%";
+  questionBox.innerHTML = `<div class="question">${q.question}</div>`;
+  optionsBox.innerHTML = "";
+
+  q.options.forEach(opt => {
+    const btn = document.createElement("button");
+    btn.className = "option";
+    btn.innerText = opt.text;
+    btn.onclick = () => {
+      if (!personality[opt.value]) personality[opt.value] = 0;
+      personality[opt.value]++;
+      index++;
+      if (index < QUESTIONS.length) { renderQuestion(); } else { calculate(); }
+    };
+    optionsBox.appendChild(btn);
+  });
+}
+
+const zodiacMatch = {
+  "aries": ["leo", "sagittarius", "gemini", "aquarius"], "taurus": ["virgo", "capricorn", "cancer", "pisces"],
+  "gemini": ["libra", "aquarius", "aries", "leo"], "cancer": ["scorpio", "pisces", "taurus", "virgo"],
+  "leo": ["aries", "sagittarius", "gemini", "libra"], "virgo": ["taurus", "capricorn", "cancer", "scorpio"],
+  "libra": ["gemini", "aquarius", "leo", "sagittarius"], "scorpio": ["cancer", "pisces", "virgo", "capricorn"],
+  "sagittarius": ["aries", "leo", "libra", "aquarius"], "capricorn": ["taurus", "virgo", "scorpio", "pisces"],
+  "aquarius": ["gemini", "libra", "aries", "sagittarius"], "pisces": ["cancer", "scorpio", "taurus", "capricorn"]
+};
+
+
+/* ============================
+匹配算法 (严格按权重执行)
+============================ */
+function calculate() {
+  quizScreen.classList.add("hidden");
+  resultScreen.classList.remove("hidden");
+  let ranking = [];
+
+  for (const name in IDOLS) {
+    const idol = IDOLS[name];
+    let score = 0; // 满分设为 100 分
+
+    // 1. 八字日主匹配 (最高 25分)
+    // 修复：直接用用户的喜用神(fav) 去匹配偶像的真实日主(dayMaster)
+    const fav = baziMap[user.bazi] || [];
+    if (fav.includes(idol.traits.dayMaster)) {
+      score += 25; // 是用户的喜用神，天作之合
+    } else if (user.bazi === idol.traits.dayMaster) {
+      score += 10; // 日主相同，像照镜子一样有默契
+    }
+
+    // 2. MBTI 匹配 (最高 25分)
+    if (mbtiMatch[user.mbti] && mbtiMatch[user.mbti].includes(idol.traits.mbti)) { 
+      score += 25; // 官配 MBTI
+    } else if (idol.traits.mbti === user.mbti) { 
+      score += 15; // 相同 MBTI
+    }
+
+    // 3. 星座匹配 (最高 15分)
+    if (zodiacMatch[user.zodiac] && zodiacMatch[user.zodiac].includes(idol.traits.zodiac)) { 
+      score += 15; 
+    } else if (idol.traits.element === zodiacElement[user.zodiac]) { 
+      score += 5; // 星象元素相同（风水火土）
+    }
+
+    // 4. 血型匹配 (最高 10分)
+    if (idol.traits.blood === user.blood) { 
+      score += 10; 
+    }
+
+    // 5. 性能量问答测试 (最高 25分)
+    // 4道题，如果偶像的 energy 恰好是你选择最多的，每命中一题给 6.25 分
+    if (personality[idol.traits.energy]) { 
+      score += personality[idol.traits.energy] * 6.25; 
+    }
+
+    ranking.push({ name, score, traits: idol.traits });
+  }
+
+  // 按分数从高到低排序
+  ranking.sort((a, b) => b.score - a.score);
+  
+  let rankHTML = "";
+  ranking.slice(0, 5).forEach((r, i) => {
+    // 将 0-100 的绝对分数，映射到 45%-99% 的区间，避免出现超低分让用户感到扫兴
+    let displayPercent = Math.floor(45 + (r.score / 100) * 54); 
+    // 防止超出 99%
+    displayPercent = Math.min(displayPercent, 99); 
+    
+    // 给第一名加个小皇冠特效
+    let crown = i === 0 ? "👑 " : "";
+    rankHTML += `<div class='rank-item'>${crown}${i + 1}. ${r.name} <span class='percent'>契合度 ${displayPercent}%</span></div>`;
+  });
+
+  /* ============================
+   结果渲染
+   ============================ */
+ 
+const best = ranking[0];
+const idolData = IDOLS[best.name];
+
+// 星座中文映射表
+const zodiacCN = {
+  aries: "白羊座", taurus: "金牛座", gemini: "双子座", cancer: "巨蟹座",
+  leo: "狮子座", virgo: "处女座", libra: "天秤座", scorpio: "天蝎座",
+  sagittarius: "射手座", capricorn: "摩羯座", aquarius: "水瓶座", pisces: "双鱼座"
+};
+
+let imgSrc = "";
+if (idolData && idolData.img) {
+    imgSrc = idolData.img;
+} else {
+    let shortName = best.name.split(' ')[0].toLowerCase();
+    imgSrc = `images/${shortName}.jpg`;
+}
+
+resultScreen.innerHTML = `
+    <h2>✨ 你的本命偶像 ✨</h2>
+    <h1 style="font-size:32px">${best.name}</h1>
+    
+    <img src="${imgSrc}" 
+         style="width:250px; border-radius:20px; box-shadow:0 10px 20px rgba(0,0,0,0.2)" 
+         onerror="this.onerror=null; this.src='https://via.placeholder.com/250x250?text=Image+Missing';">
+    
+    <div style="margin-top: 15px;">
+      <span class="badge">星座: ${zodiacCN[best.traits.zodiac] || best.traits.zodiac}</span>
+      <span class="badge">MBTI: ${best.traits.mbti}</span>
+      <span class="badge">八字: ${best.traits.dayMaster}</span>
+      <span class="badge">能量: ${best.traits.energy.toUpperCase()}</span>
+    </div>
+
+    <div class="rank">
+        <h3>匹配度排行榜</h3>
+        ${rankHTML}
+    </div>
+    
+    <div class="actions">
+      <button onclick="location.reload()">重新测试</button>
+      <button class="secondary" onclick="share('${best.name}')">分享结果</button>
+    </div>
+`;}
+  
+/* ============================
+升级版分享功能
+============================ */
+function share(name) {
+  // 你的作品网址
+  const myUrl = "https://bzhyz.github.io/kpopchar/";
+  
+  // 获取当前匹配偶像的图片路径 (或者是偶像的名字，方便用户配图)
+  const text = `🔮 我在【KPOP偶像命理匹配】中测出来，我的本命偶像竟然是 ${name}！✨\n\n契合度爆表，不愧是我的命中注定！你也快来测测看你的本命idol是谁吧：\n👉 ${myUrl}`;
+
+  // 1. 优先尝试系统原生分享 (手机端效果最好)
+  if (navigator.share) {
+    navigator.share({
+      title: 'KPOP 偶像命理匹配',
+      text: text,
+      url: myUrl,
+    }).catch(() => {
+      // 如果原生分享取消，则退回到剪贴板
+      copyToClipboard(text);
+    });
+  } else {
+    // 2. 电脑端或不支持原生分享的浏览器，直接复制文案
+    copyToClipboard(text);
+  }
+}
+
+// 辅助函数：执行复制动作
+function copyToClipboard(text) {
+  navigator.clipboard.writeText(text).then(() => {
+    alert("✨ 分享文案和网址已复制！\n\n快去发小红书/微博安利你的本命吧~");
+  }).catch(err => {
+    console.error('复制失败', err);
+  });
+}
+
+
+
+</script>
+
+</body>
+</html>
