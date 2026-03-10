@@ -1234,7 +1234,7 @@ function calculate() {
     else if (idol.traits.blood === user.blood) { score += 10; }
 
     // 5. 性能量问答测试
-    if (personality[idol.traits.energy]) { score += personality[idol.traits.energy] * 6.25; }
+    if (personality[idol.traits.energy]) { score += personality[idol.traits.energy] * 5.25; }
 
     ranking.push({ name, score, traits: idol.traits });
   }
