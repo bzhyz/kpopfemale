@@ -11,6 +11,32 @@
         y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
     })(window, document, "clarity", "script", "vt2bhbmq9o");
 </script>
+/* 新增：图片切换时的淡入动画 */
+@keyframes fadeIn {
+    from { 
+        opacity: 0; 
+        transform: translateY(10px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+/* 优化排行榜单项的悬停效果，让用户知道可以点击 */
+.rank-item:hover {
+    background-color: #f5f5f5 !important;
+}
+
+.badge {
+    display: inline-block;
+    background: #f0f0f0;
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 13px;
+    margin: 3px;
+    color: #555;
+}
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(135deg,#1f1c2c,#928dab);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;color:#222}
@@ -1173,11 +1199,18 @@ const zodiacMatch = {
   "sagittarius": ["aries", "leo", "libra", "aquarius"], "capricorn": ["taurus", "virgo", "scorpio", "pisces"],
   "aquarius": ["gemini", "libra", "aries", "sagittarius"], "pisces": ["cancer", "scorpio", "taurus", "capricorn"]
 };
-
-
 /* ============================
-匹配算法 (严格按权重执行)
+匹配算法 & 动态渲染 (已优化交互)
 ============================ */
+let currentTop5 = []; // 新增：用于全局保存前五名的爱豆数据
+
+// 提取到外部，方便复用
+const zodiacCN = {
+  aries: "白羊座", taurus: "金牛座", gemini: "双子座", cancer: "巨蟹座",
+  leo: "狮子座", virgo: "处女座", libra: "天秤座", scorpio: "天蝎座",
+  sagittarius: "射手座", capricorn: "摩羯座", aquarius: "水瓶座", pisces: "双鱼座"
+};
+
 function calculate() {
   quizScreen.classList.add("hidden");
   resultScreen.classList.remove("hidden");
@@ -1187,113 +1220,110 @@ function calculate() {
     const idol = IDOLS[name];
     let score = 0; // 满分设为 100 分
 
-    // 1. 八字日主匹配 (最高 25分)
-    // 修复：直接用用户的喜用神(fav) 去匹配偶像的真实日主(dayMaster)
+    // 1. 八字日主匹配
     const fav = baziMap[user.bazi] || [];
-    if (fav.includes(idol.traits.dayMaster)) {
-      score += 25; // 是用户的喜用神，天作之合
-    } else if (user.bazi === idol.traits.dayMaster) {
-      score += 10; // 日主相同，像照镜子一样有默契
-    }
+    if (fav.includes(idol.traits.dayMaster)) { score += 25; } 
+    else if (user.bazi === idol.traits.dayMaster) { score += 10; }
 
-    // 2. MBTI 匹配 (最高 25分)
-    if (mbtiMatch[user.mbti] && mbtiMatch[user.mbti].includes(idol.traits.mbti)) { 
-      score += 25; // 官配 MBTI
-    } else if (idol.traits.mbti === user.mbti) { 
-      score += 15; // 相同 MBTI
-    }
+    // 2. MBTI 匹配
+    if (mbtiMatch[user.mbti] && mbtiMatch[user.mbti].includes(idol.traits.mbti)) { score += 25; } 
+    else if (idol.traits.mbti === user.mbti) { score += 15; }
 
-    // 3. 星座匹配 (最高 15分)
-    if (zodiacMatch[user.zodiac] && zodiacMatch[user.zodiac].includes(idol.traits.zodiac)) { 
-      score += 15; 
-    } else if (idol.traits.element === zodiacElement[user.zodiac]) { 
-      score += 5; // 星象元素相同（风水火土）
-    }
+    // 3. 星座匹配
+    if (zodiacMatch[user.zodiac] && zodiacMatch[user.zodiac].includes(idol.traits.zodiac)) { score += 15; } 
+    else if (idol.traits.element === zodiacElement[user.zodiac]) { score += 5; }
 
-    // 4. 血型匹配 (最高 10分)
-    if (user.blood === "N/A" || idol.traits.blood === "N/A") {
-      // 如果用户或偶像血型未知，给一个中庸的基础分 (例如 5分)，不影响整体大局
-      score += 5; 
-    } else if (bloodMatchScore[user.blood] && bloodMatchScore[user.blood][idol.traits.blood]) {
-      // 根据兼容性表加分
-      score += bloodMatchScore[user.blood][idol.traits.blood];
-    } else if (idol.traits.blood === user.blood) {
-      // 万一逻辑漏掉的情况（兜底：相同血型满分）
-      score += 10;
-    }
+    // 4. 血型匹配
+    if (user.blood === "N/A" || idol.traits.blood === "N/A") { score += 5; } 
+    else if (bloodMatchScore[user.blood] && bloodMatchScore[user.blood][idol.traits.blood]) { score += bloodMatchScore[user.blood][idol.traits.blood]; } 
+    else if (idol.traits.blood === user.blood) { score += 10; }
 
-    // 5. 性能量问答测试 (最高 25分)
-    // 4道题，如果偶像的 energy 恰好是你选择最多的，每命中一题给 6.25 分
-    if (personality[idol.traits.energy]) { 
-      score += personality[idol.traits.energy] * 6.25; 
-    }
+    // 5. 性能量问答测试
+    if (personality[idol.traits.energy]) { score += personality[idol.traits.energy] * 6.25; }
 
     ranking.push({ name, score, traits: idol.traits });
   }
 
-  // 按分数从高到低排序
+  // 按分数从高到低排序，截取前五名保存
   ranking.sort((a, b) => b.score - a.score);
+  currentTop5 = ranking.slice(0, 5);
   
-  let rankHTML = "";
-  ranking.slice(0, 5).forEach((r, i) => {
-    // 将 0-100 的绝对分数，映射到 45%-99% 的区间，避免出现超低分让用户感到扫兴
-    let displayPercent = Math.floor(45 + (r.score / 100) * 54); 
-    // 防止超出 99%
-    displayPercent = Math.min(displayPercent, 99); 
-    
-    // 给第一名加个小皇冠特效
-    let crown = i === 0 ? "👑 " : "";
-    rankHTML += `<div class='rank-item'>${crown}${i + 1}. ${r.name} <span class='percent'>契合度 ${displayPercent}%</span></div>`;
-  });
-
-  /* ============================
-   结果渲染
-   ============================ */
- 
-const best = ranking[0];
-const idolData = IDOLS[best.name];
-
-// 星座中文映射表
-const zodiacCN = {
-  aries: "白羊座", taurus: "金牛座", gemini: "双子座", cancer: "巨蟹座",
-  leo: "狮子座", virgo: "处女座", libra: "天秤座", scorpio: "天蝎座",
-  sagittarius: "射手座", capricorn: "摩羯座", aquarius: "水瓶座", pisces: "双鱼座"
-};
-
-let imgSrc = "";
-if (idolData && idolData.img) {
-    imgSrc = idolData.img;
-} else {
-    let shortName = best.name.split(' ')[0].toLowerCase();
-    imgSrc = `images/${shortName}.jpg`;
+  // 默认渲染第一名（索引为 0）
+  renderResultView(0);
 }
 
-resultScreen.innerHTML = `
-    <h2>✨ 你的本命偶像 ✨</h2>
-    <h1 style="font-size:32px">${best.name}</h1>
-    
-    <img src="${imgSrc}" 
-         style="width:250px; border-radius:20px; box-shadow:0 10px 20px rgba(0,0,0,0.2)" 
-         onerror="this.onerror=null; this.src='https://via.placeholder.com/250x250?text=Image+Missing';">
-    
-    <div style="margin-top: 15px;">
-      <span class="badge">星座: ${zodiacCN[best.traits.zodiac] || best.traits.zodiac}</span>
-      <span class="badge">MBTI: ${best.traits.mbti}</span>
-      <span class="badge">八字: ${best.traits.dayMaster}</span>
-      <span class="badge">能量: ${best.traits.energy.toUpperCase()}</span>
-    </div>
+/* ============================
+   独立的渲染视图函数 (支持点击切换)
+============================ */
+function renderResultView(selectedIndex) {
+  const selectedItem = currentTop5[selectedIndex];
+  const idolData = IDOLS[selectedItem.name];
 
-    <div class="rank">
-        <h3>匹配度排行榜</h3>
-        ${rankHTML}
-    </div>
+  let imgSrc = "";
+  if (idolData && idolData.img) {
+      imgSrc = idolData.img;
+  } else {
+      let shortName = selectedItem.name.split(' ')[0].toLowerCase();
+      imgSrc = `images/${shortName}.jpg`;
+  }
+
+  // 动态生成排行榜 HTML，并为每一项添加 onclick 切换事件
+  let rankHTML = "";
+  currentTop5.forEach((r, i) => {
+    let displayPercent = Math.floor(45 + (r.score / 100) * 54); 
+    displayPercent = Math.min(displayPercent, 99); 
     
-    <div class="actions">
-      <button onclick="location.reload()">重新测试</button>
-      <button class="secondary" onclick="share('${best.name}')">分享结果</button>
-    </div>
-`;}
-  
+    let crown = i === 0 ? "👑 " : "";
+    
+    // UI状态区分：当前选中的项高亮，其余项显示为可点击（手型鼠标）
+    let activeStyle = i === selectedIndex 
+        ? "background:#f4f4f4; font-weight:bold; border-radius:10px; border-bottom:none; margin-bottom:4px;" 
+        : "cursor:pointer; border-bottom:1px solid #eee; margin-bottom:4px;";
+        
+    rankHTML += `
+      <div class='rank-item' 
+           style='padding:10px; transition:0.2s; ${activeStyle}' 
+           onclick='renderResultView(${i})'>
+        ${crown}${i + 1}. ${r.name} 
+        <span class='percent' style='${i === selectedIndex ? "color:#000; font-weight:bold;" : ""}'>
+            契合度 ${displayPercent}%
+        </span>
+      </div>`;
+  });
+
+  // 动态更新标题（如果是第一名显示本命，否则显示排名）
+  const titleText = selectedIndex === 0 ? "✨ 你的本命偶像 ✨" : `✨ 匹配位列第 ${selectedIndex + 1} ✨`;
+
+  resultScreen.innerHTML = `
+      <h2 style="font-size:22px; color:#666; margin-bottom:5px;">${titleText}</h2>
+      <h1 style="font-size:30px; margin-top:0;">${selectedItem.name}</h1>
+      
+      <img src="${imgSrc}" 
+           style="width:250px; border-radius:18px; box-shadow:0 15px 35px rgba(0,0,0,0.15); object-fit: cover; animation: fadeIn 0.4s ease;" 
+           onerror="this.onerror=null; this.src='https://via.placeholder.com/250x250?text=Image+Missing';">
+      
+      <div style="margin-top: 18px;">
+        <span class="badge">星座: ${zodiacCN[selectedItem.traits.zodiac] || selectedItem.traits.zodiac}</span>
+        <span class="badge">MBTI: ${selectedItem.traits.mbti}</span>
+        <span class="badge">八字: ${selectedItem.traits.dayMaster}</span>
+        <span class="badge">能量: ${selectedItem.traits.energy.toUpperCase()}</span>
+      </div>
+
+      <div class="rank" style="margin-top: 25px;">
+          <h3 style="margin-bottom: 8px;">匹配度排行榜 <span style="font-size:12px; font-weight:normal; color:#888;">(点击爱豆查看详情)</span></h3>
+          <div style="border: 1px solid #eaeaea; border-radius: 12px; padding: 5px;">
+            ${rankHTML}
+          </div>
+      </div>
+      
+      <div class="actions">
+        <button onclick="location.reload()">重新测试</button>
+        <button class="secondary" onclick="share('${selectedItem.name}')">分享结果</button>
+      </div>
+  `;
+}
+
+
 /* ============================
 升级版分享功能
 ============================ */
